@@ -1,0 +1,22 @@
+{
+  "name": "api-validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/index",
+  "bin": {
+    "route-validate": "./src/index.js"
+  },
+  "scripts": {
+    "run": "dist/src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/request": "^2.47.0",
+    "ajv": "^6.4.0",
+    "lodash": "^4.17.10",
+    "request": "^2.87.0",
+    "ts-interface-search": "^1.0.0",
+    "typescript-json-schema": "^0.25.1"
+  }
+}
