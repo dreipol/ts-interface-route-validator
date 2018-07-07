@@ -1,38 +1,24 @@
-#!/usr/bin/env node
+const apiDataLoader = require('./APIDataLoader');
+const pluginSchemaValidator = require('./PluginSchemaValidator');
+const printer = require('./Printer');
+const ora = require('ora');
 
-const request = require('request');
-const Ajv = require('ajv');
-const { get } = require('lodash');
-const interfaceSchemaLoader = require('./InterfaceSchemaLoader.js');
+module.exports = async function (routes) {
+    const spinner = ora('Loading...').start();
+    const checks = routes.map(({ url, dataPath, plugins }) => {
+        spinner.text = `Access ${url}`;
 
-
-const ROUTES = require('./routes.json');
-
-ROUTES.map(({ url, path, interfaceName }) => {
-    interfaceSchemaLoader(interfaceName)
-        .then((schema) => {
-            validateRoute(url, path, schema, interfaceName);
-        });
-});
-
-
-function validateRoute(url, dataPath, schema, interfaceName) {
-    request.get(url, (err, resp, data) => {
-        if (err) {
-            throw err;
-        }
-
-        data = JSON.parse(data);
-
-        var ajv = new Ajv({ allErrors: true });
-        var validate = ajv.compile(schema);
-        var valid = validate(get(data, dataPath), dataPath);
-
-        if (!valid) {
-            validate.errors.map(err => {
-                console.error(`${err.dataPath} does not match ${interfaceName}`);
-                console.debug(err.message);
-            });
-        }
+        return apiDataLoader(url, dataPath)
+            .then((apiPlugins) => {
+                spinner.text = `Validate ${url}`;
+                return pluginSchemaValidator(apiPlugins, plugins);
+            })
+            .then( (results) => {
+                return {url, results};
+            })
     });
-}
+
+    let result = await Promise.all(checks);
+    spinner.stop();
+    printer(result);
+};

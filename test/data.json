@@ -1,0 +1,29 @@
+{
+    "data": {
+        "containers": {
+            "main": {
+                "plugins": [
+                    {
+                        "type": "dyn-video-teaser",
+                        "content": {
+                            "title": "The fastest Way from Idea to Market",
+                            "link": {
+                                "path": "/en/products/",
+                                "label": "Products"
+                            },
+                            "lead": "Manufactoring Swiss Quality Dry Granulation Systems since 1986."
+                        }
+                    },
+                    {
+                        "type": "dyn-title-lead",
+                        "content": {
+                            "title": "GERTEIS",
+                            "lead": "GERTEIS® has a depth of dry granulation knowledge and experience; its team of roller compaction specialists can evaluate an application and quickly predict and establish the best roller compaction parameters to achieve the optimum dry granulation process."
+                        }
+                    }
+                ],
+                "type": "cmp-main"
+            }
+        }
+    }
+}

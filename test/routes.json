@@ -1,0 +1,10 @@
+[
+    {
+        "url": "http://localhost:8000/en/api/pages",
+        "dataPath": "data.containers.main.plugins",
+        "plugins": {
+            "dyn-title-lead": "IVideoTeaserPlugin",
+            "dyn-video-teaser": "IVideoTeaserPlugin"
+        }
+    }
+]

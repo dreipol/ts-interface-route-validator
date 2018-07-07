@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-const { resolve } = require("path");
 const { getProgramFromFiles, buildGenerator } = require('typescript-json-schema');
 const glob = require('glob');
 
@@ -8,6 +6,9 @@ const settings = {
     required: true,
     titles: true,
     topRef: true,
+    ref: true,
+    noExtraProps: true,
+    ignoreErrors: false
 };
 
 const GLOB_SETTINGS = {
@@ -16,19 +17,27 @@ const GLOB_SETTINGS = {
 
 const searchPath = `${process.cwd()}/**/*.ts`;
 
-module.exports = function (interfacename) {
+module.exports = async function (interfacename) {
+    const files = await getFiles();
+    const program = getProgramFromFiles(files);
+    const generator = buildGenerator(program, settings);
+
+    if(generator) {
+        const schema = generator.getSchemaForSymbol(interfacename, true);
+        delete schema.$schema;
+        return schema;
+    }
+    throw new Error('No generator created');
+};
+
+
+function getFiles(){
     return new Promise((res, rej) => {
         glob(searchPath, GLOB_SETTINGS, (err, files) => {
-            if (err) {
-                throw err;
+            if(err){
+                return rej(err);
             }
-
-            const program = getProgramFromFiles(files);
-            const generator = buildGenerator(program, settings);
-
-            const schema = generator.getSchemaForSymbol(interfacename, true);
-            delete schema.$schema;
-            return res(schema);
-        });
+            return res(files);
+        })
     });
-};
+}
