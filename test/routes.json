@@ -1,6 +1,9 @@
 [
     {
-        "url": "http://localhost:8000/en/api/pages",
+        "urls": [
+            "http://localhost:8000/en/api/pages",
+            "http://localhost:8000/en/api/pages/about-us"
+        ],
         "dataPath": "data.containers.main.plugins",
         "plugins": {
             "dyn-title-lead": "IVideoTeaserPlugin",

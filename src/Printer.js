@@ -8,14 +8,14 @@ const FIG_MAP = {
     [ERRORS.ERROR]: figures.cross,
 };
 
-module.exports = function (endpointResults) {
-    endpointResults.map((endpointResult) => {
-        printEndpointResult(endpointResult);
-    });
+module.exports = function (url, endpointResults) {
+    console.log(chalk.blue(`API ${url} results`));
+
+    printEndpointResult(endpointResults);
 };
 
 function printEndpointResult(endpointResult) {
-    endpointResult.results.map((result) => {
+    endpointResult.map((result) => {
         if (result.valid) {
             printValid(result)
         } else {
@@ -26,9 +26,9 @@ function printEndpointResult(endpointResult) {
 
 function printError(result) {
     result.errors.map(error => {
-        if(result.interfaceName) {
+        if (result.interfaceName) {
             console.log(chalk.red(`${FIG_MAP[result.errType]} ${result.interfaceName} ${result.plugin.type} ${error.message}`));
-        }else{
+        } else {
             console.log(chalk.yellow(`${FIG_MAP[result.errType]} ${error.message}`));
         }
     });
