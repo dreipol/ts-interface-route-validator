@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     WARNING: 'WARNING',
     ERROR: 'ERROR',
 };

@@ -1,14 +1,14 @@
-const request = require('request');
-const { get } = require('lodash');
+import request from 'request';
+import {get} from 'lodash';
 
 /**
  *
  * @param {string} url
  * @param {string} dataPath
  */
-module.exports = async function (url, dataPath) {
+export async function getApiData (url: string, dataPath: string): Promise<any> {
     return new Promise((res, rej) => {
-        request.get(url, (err, resp, data) => {
+        return request.get(url, (err, resp, data) => {
             if (err) {
                 return rej(err);
             }
@@ -21,4 +21,4 @@ module.exports = async function (url, dataPath) {
             return res(plugins);
         });
     });
-};
+}

@@ -1,4 +1,5 @@
 const ROUTES = require('./routes.json');
-const validator = require('../src/index');
+const { validateRoutes } = require('../dist/index');
+const searchPath = `${process.cwd()}/**/*.ts`;
 
-validator(ROUTES);
+validateRoutes(searchPath, ROUTES);
