@@ -27,7 +27,7 @@ function printError(url, result) {
             console.log(chalk.red(`${FIG_MAP[result.errType]} ${url} - ${result.interfaceName} ${result.plugin.type} ${error.message}`));
         }
         else {
-            console.log(chalk.yellow(`${FIG_MAP[result.errType]}2 ${url} - ${error.message}`));
+            console.log(chalk.yellow(`${FIG_MAP[result.errType]} ${url} - ${error.message}`));
         }
     });
 }
