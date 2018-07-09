@@ -22,13 +22,13 @@ const settings = {
 const GLOB_SETTINGS = {
     ignore: ['**/node_modules/**'],
 };
-function getInterfaceSchema(searchPath, interfacename) {
+function getInterfaceSchema(searchPath, interfaceName) {
     return __awaiter(this, void 0, void 0, function* () {
         const files = yield getFiles(searchPath);
         const program = getProgramFromFiles(files);
         const generator = buildGenerator(program, settings);
         if (generator) {
-            const schema = generator.getSchemaForSymbol(interfacename, true);
+            const schema = generator.getSchemaForSymbol(interfaceName, true);
             delete schema.$schema;
             return schema;
         }

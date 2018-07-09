@@ -1,1 +1,1 @@
-export declare function getInterfaceSchema(searchPath: string, interfacename: string): Promise<any>;
+export declare function getInterfaceSchema(searchPath: string, interfaceName: string): Promise<any>;

@@ -10,9 +10,9 @@ const ERRORS = require('../ERRORTYPES');
 
 export async function validatePlugins(searchPath: string, apiPlugins: PluginInterface[], pluginDefinitions: PluginDefinitions) {
     const checks = apiPlugins.map((apiPlugin) => {
-        return validatePlugin(searchPath, apiPlugin, pluginDefinitions);
+            return validatePlugin(searchPath, apiPlugin, pluginDefinitions);
     });
-    return await Promise.all(checks);
+    return await Promise.all(checks)
 }
 
 export async function validatePlugin(searchPath: string, apiPlugin: PluginInterface, pluginDefinitions: PluginDefinitions): Promise<any> {

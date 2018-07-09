@@ -7,31 +7,27 @@ const FIG_MAP = {
     [ERRORS.WARNING]: figures.warning,
     [ERRORS.ERROR]: figures.cross,
 };
-function print(url, endpointResults) {
-    console.log(chalk.blue(`${figures.pointer} API ${url} results`));
-    printEndpointResult(endpointResults);
-}
-exports.print = print;
-function printEndpointResult(endpointResult) {
+function print(url, endpointResult) {
     endpointResult.map((result) => {
         if (result.valid) {
             printValid(result);
         }
         else {
-            printError(result);
+            printError(url, result);
         }
     });
 }
-function printError(result) {
+exports.print = print;
+function printError(url, result) {
     if (!result.errors) {
         return;
     }
     result.errors.map(error => {
         if (result.interfaceName) {
-            console.log(chalk.red(`${FIG_MAP[result.errType]} ${result.interfaceName} ${result.plugin.type} ${error.message}`));
+            console.log(chalk.red(`${FIG_MAP[result.errType]} ${url} - ${result.interfaceName} ${result.plugin.type} ${error.message}`));
         }
         else {
-            console.log(chalk.yellow(`${FIG_MAP[result.errType]} ${error.message}`));
+            console.log(chalk.yellow(`${FIG_MAP[result.errType]}2 ${url} - ${error.message}`));
         }
     });
 }

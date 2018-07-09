@@ -16,13 +16,14 @@ const GLOB_SETTINGS = {
 };
 
 
-export async function getInterfaceSchema(searchPath: string, interfacename: string) {
+export async function getInterfaceSchema(searchPath: string, interfaceName: string) {
     const files = await getFiles(searchPath);
+
     const program = getProgramFromFiles(files);
     const generator = buildGenerator(program, settings);
 
     if (generator) {
-        const schema = generator.getSchemaForSymbol(interfacename, true);
+        const schema = generator.getSchemaForSymbol(interfaceName, true);
         delete schema.$schema;
         return schema;
     }
