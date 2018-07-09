@@ -40,7 +40,7 @@ The `plugins` object, is a simple key value map. It maps the plugin types to the
                 "http://localhost:8000/en/api/pages/about-us"
             ],
             "dataPath": "data.containers.main.plugins",
-            "definition": {
+            "definitions": {
                 "dyn-title-lead": "IVideoTeaserPlugin",
                 "dyn-video-teaser": "IVideoTeaserPlugin"
             }
