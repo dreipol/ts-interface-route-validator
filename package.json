@@ -1,15 +1,22 @@
 {
-  "name": "api-validator",
+  "name": "@dreipol/ts-interface-route-validator",
   "version": "1.0.0",
-  "description": "",
+  "description": "API TypeScript interface",
   "main": "dist/index",
   "bin": {
     "route-validate": "./dist/index.js"
   },
-  "scripts": {
+  "files": [
+    "dist",
+    "bin.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dreipol/ts-interface-route-validator.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "faebeee <faebeee@gmail.com>",
+  "homepage": "https://github.com/dreipol/ts-interface-route-validator#readme",
+  "license": "MIT",
   "dependencies": {
     "ajv": "^6.4.0",
     "chalk": "^2.4.1",
