@@ -18,13 +18,13 @@ First create a file to execute the validator.
     
 The code above will print the following in your CLI
 
-    ❯ API http://localhost:8000/en/api/pages results
     ✔ IVideoTeaserPlugin dyn-video-teaser
-    ✖ IVideoTeaserPlugin dyn-title-lead should have required property 'link'
-    ✖ No Interface for dyn-service-teaser
-    ✖ No Interface for dyn-news-teaser
-    ❯ API http://localhost:8000/en/api/pages/about-us results
-    ✖ No Interface for dyn-team-list
+    ✔ ITitleLeadPlugin dyn-title-lead
+    ✔ IServiceTeaserPlugin dyn-service-teaser
+    ✖ http://localhost:8000/en/api/pages - NewsTeaserPlugin NewsTeaserPlugin.content.news[0] should NOT have additional properties  {"additionalProperty":"date"}
+    ✖ http://localhost:8000/en/api/pages - NewsTeaserPlugin NewsTeaserPlugin.content.news[1] should NOT have additional properties  {"additionalProperty":"date"}
+    ✖ http://localhost:8000/en/api/pages/about-us - No Interface for dyn-team-list
+
     
 ## Config
 There is a simple config file required. In the example above it's the `routes.json` file. In there we 

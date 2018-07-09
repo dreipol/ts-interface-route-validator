@@ -24,7 +24,8 @@ function printError(url, result) {
     }
     result.errors.map(error => {
         if (result.interfaceName) {
-            console.log(chalk.red(`${FIG_MAP[result.errType]} ${url} - ${result.interfaceName} ${result.plugin.type} ${error.message}`));
+            const errorLocation = [result.interfaceName, error.dataPath].join('');
+            console.log(chalk.red(`${FIG_MAP[result.errType]} ${url} - ${result.interfaceName} ${errorLocation} ${error.message}  ${JSON.stringify(error.params)}`));
         }
         else {
             console.log(chalk.yellow(`${FIG_MAP[result.errType]} ${url} - ${error.message}`));
