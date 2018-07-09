@@ -10,7 +10,7 @@ const FIG_MAP: { [key: string]: string } = {
     [ERRORS.ERROR]: figures.cross,
 };
 
-export function print (url: string, endpointResults: ValidationResultInterface[]) {
+export function print(url: string, endpointResults: ValidationResultInterface[]) {
     console.log(chalk.blue(`${figures.pointer} API ${url} results`));
 
     printEndpointResult(endpointResults);
@@ -27,6 +27,10 @@ function printEndpointResult(endpointResult: ValidationResultInterface[]) {
 }
 
 function printError(result: ValidationResultInterface) {
+    if (!result.errors) {
+        return;
+    }
+
     result.errors.map(error => {
         if (result.interfaceName) {
             console.log(chalk.red(`${FIG_MAP[result.errType]} ${result.interfaceName} ${result.plugin.type} ${error.message}`));

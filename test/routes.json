@@ -5,9 +5,16 @@
             "http://localhost:8000/en/api/pages/about-us"
         ],
         "dataPath": "data.containers.main.plugins",
-        "plugins": {
+        "definitions": {
             "dyn-title-lead": "IVideoTeaserPlugin",
             "dyn-video-teaser": "IVideoTeaserPlugin"
         }
+    },
+    {
+        "urls": [
+            "http://localhost:3000/en/api/pages/?partials=footer"
+        ],
+        "dataPath": "partials.footer",
+        "definition":  "IVideoTeaserPlugin"
     }
 ]

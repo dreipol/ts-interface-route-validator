@@ -32,6 +32,7 @@ define a couple of routes/api endpoints we want to validate. In Addition we have
 This path is required to access the data of the returned response.
 The `plugins` object, is a simple key value map. It maps the plugin types to the interface names.
 
+
     [
         {
             "urls": [
@@ -39,9 +40,20 @@ The `plugins` object, is a simple key value map. It maps the plugin types to the
                 "http://localhost:8000/en/api/pages/about-us"
             ],
             "dataPath": "data.containers.main.plugins",
-            "plugins": {
+            "definition": {
                 "dyn-title-lead": "IVideoTeaserPlugin",
                 "dyn-video-teaser": "IVideoTeaserPlugin"
             }
         }
     ]
+
+if you want to validate a single object from the response, you can configure it like this
+
+
+    {
+        "urls": [
+            "http://localhost:3000/en/api/pages/?partials=footer"
+        ],
+        "dataPath": "partials.footer",
+        "definition":  "FooterInterface"
+    }

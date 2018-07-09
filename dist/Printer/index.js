@@ -23,6 +23,9 @@ function printEndpointResult(endpointResult) {
     });
 }
 function printError(result) {
+    if (!result.errors) {
+        return;
+    }
     result.errors.map(error => {
         if (result.interfaceName) {
             console.log(chalk.red(`${FIG_MAP[result.errType]} ${result.interfaceName} ${result.plugin.type} ${error.message}`));

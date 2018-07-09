@@ -17,37 +17,44 @@ const InterfaceSchemaLoader_1 = require("../InterfaceSchemaLoader");
 const ERRORS = require('../ERRORTYPES');
 function validatePlugins(searchPath, apiPlugins, pluginDefinitions) {
     return __awaiter(this, void 0, void 0, function* () {
-        const checks = apiPlugins.map((plugin) => {
-            return validatePlugin(searchPath, plugin, pluginDefinitions);
+        const checks = apiPlugins.map((apiPlugin) => {
+            return validatePlugin(searchPath, apiPlugin, pluginDefinitions);
         });
         return yield Promise.all(checks);
     });
 }
 exports.validatePlugins = validatePlugins;
-function validatePlugin(searchPath, plugin, pluginDefinitions) {
+function validatePlugin(searchPath, apiPlugin, pluginDefinitions) {
     return __awaiter(this, void 0, void 0, function* () {
-        const interfaceName = getInterfaceName(plugin, pluginDefinitions);
+        const interfaceName = getInterfaceName(apiPlugin, pluginDefinitions);
         if (!interfaceName) {
             return {
                 errType: ERRORS.WARNING,
-                plugin,
+                plugin: apiPlugin,
                 valid: false,
-                errors: [{ message: `No Interface for ${plugin.type}` }],
+                errors: [{ message: `No Interface for ${apiPlugin.type}` }],
             };
         }
+        return yield validatePluginWithInterface(searchPath, interfaceName, apiPlugin);
+    });
+}
+exports.validatePlugin = validatePlugin;
+function validatePluginWithInterface(searchPath, interfaceName, apiPlugin) {
+    return __awaiter(this, void 0, void 0, function* () {
         const schema = yield InterfaceSchemaLoader_1.getInterfaceSchema(searchPath, interfaceName);
         const ajv = new ajv_1.default({ allErrors: true });
         const validate = ajv.compile(schema);
-        const valid = validate(plugin);
+        const valid = validate(apiPlugin);
         return {
             errType: ERRORS.ERROR,
-            plugin,
-            valid,
+            plugin: apiPlugin,
+            valid: !!valid,
             interfaceName,
             errors: validate.errors,
         };
     });
 }
+exports.validatePluginWithInterface = validatePluginWithInterface;
 function getInterfaceName(plugin, pluginDefinitions) {
     return lodash_1.get(pluginDefinitions, plugin.type);
 }
