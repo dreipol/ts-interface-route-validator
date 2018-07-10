@@ -6,6 +6,9 @@
   "bin": {
     "route-validate": "./dist/index.js"
   },
+  "scripts": {
+    "test": "NODE_ENV=test node_modules/.bin/mocha test/**/*.spec.js"
+  },
   "files": [
     "dist",
     "bin.js"
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.109",
     "@types/node": "^8.5.5",
-    "@types/request": "^2.47.0"
+    "@types/request": "^2.47.0",
+    "mocha": "^5.2.0"
   }
 }

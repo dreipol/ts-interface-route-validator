@@ -18,12 +18,8 @@ First create a file to execute the validator.
     
 The code above will print the following in your CLI
 
-    ✔ IVideoTeaserPlugin dyn-video-teaser
-    ✔ ITitleLeadPlugin dyn-title-lead
-    ✔ IServiceTeaserPlugin dyn-service-teaser
-    ✖ http://localhost:8000/en/api/pages - NewsTeaserPlugin NewsTeaserPlugin.content.news[0] should NOT have additional properties  {"additionalProperty":"date"}
-    ✖ http://localhost:8000/en/api/pages - NewsTeaserPlugin NewsTeaserPlugin.content.news[1] should NOT have additional properties  {"additionalProperty":"date"}
-    ✖ http://localhost:8000/en/api/pages/about-us - No Interface for dyn-team-list
+![Add new Run/Debug COnfig](./doc/4.png)
+
 
     
 ## Config
@@ -57,3 +53,36 @@ if you want to validate a single object from the response, you can configure it 
         "dataPath": "partials.footer",
         "definition":  "FooterInterface"
     }
+
+## Usage
+The best and easiest way to add this API validation to setup, is to create a
+`gulp` task for tha validation.
+
+    const gulp = require('gulp');
+    const { validateRoutes } = require('@dreipol/ts-interface-route-validator'); // include the validator
+    
+    const { src } = require('../../config/paths.js'); // Project config
+    const searchPath = `${src}/**/*.ts`; // point to the location where your interfaces are stored
+    
+    gulp.task('api:validate', function() {
+        const ROUTES = require('../../config/api.json'); // load the api routes config file
+        return validateRoutes(searchPath, ROUTES);
+    });
+    
+Now we can either call this command on the CLI by running `gulp api:validate`
+or by adding the gulp task to the IDE.
+This is done by adding a new `Run/Debug Configuration`. 
+
+![Add new Run/Debug COnfig](./doc/1.png)
+
+There we select `Gulp.js` as a new config base. 
+
+![Add new Run/Debug COnfig](./doc/2.png)
+
+Now the only thing we have to set is the `Name` and the `Gulp Task`. 
+
+![Add new Run/Debug COnfig](./doc/3.png)
+
+The name can be set how ever you want it. The `Gulp Task` has
+to be the name of the task above. In this case it's `api:validate`.
+
