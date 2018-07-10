@@ -11,32 +11,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const PluginSchemaValidator_1 = require("./PluginSchemaValidator");
 const APIDataLoader_1 = require("./APIDataLoader");
 const Printer_1 = require("./Printer");
-function validateRoutes(searchPath, routes) {
+function validateRoutes(searchPath, routes, interfaceNameResolve = getInterfaceName) {
     return __awaiter(this, void 0, void 0, function* () {
         for (let i = 0; i < routes.length; i++) {
-            const { urls, definitions, dataPath, definition } = routes[i];
+            const { urls, dataPath } = routes[i];
             for (let c = 0; c < urls.length; c++) {
                 const url = urls[c];
-                yield validateUrl(searchPath, url, dataPath, definitions, definition);
+                yield validateUrl(searchPath, url, dataPath, interfaceNameResolve);
             }
         }
     });
 }
 exports.validateRoutes = validateRoutes;
-function validateUrl(searchPath, url, dataPath, definitions, definition) {
+function validateUrl(searchPath, url, dataPath, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
         const apiPlugins = yield APIDataLoader_1.getApiData(url, dataPath);
-        let results = null;
-        if (definition && !Array.isArray(apiPlugins)) {
-            results = [yield PluginSchemaValidator_1.validatePluginWithInterface(searchPath, definition, apiPlugins)];
-        }
-        else {
-            results = yield PluginSchemaValidator_1.validatePlugins(searchPath, apiPlugins, definitions);
-        }
+        const results = yield PluginSchemaValidator_1.validatePlugins(searchPath, apiPlugins, interfaceNameResolve);
         if (!results) {
             return;
         }
         Printer_1.print(url, results);
     });
+}
+function getInterfaceName(plugin) {
+    let interfaceNames = plugin.type
+        .replace('dyn', '')
+        .replace(/-\w/ig, (chr) => {
+        return chr.toUpperCase();
+    })
+        .split('-');
+    interfaceNames.unshift('I');
+    interfaceNames.push('Plugin');
+    return interfaceNames.join('');
 }
 //# sourceMappingURL=index.js.map

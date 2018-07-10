@@ -22,10 +22,15 @@ export async function getInterfaceSchema(searchPath: string, interfaceName: stri
     const program = getProgramFromFiles(files);
     const generator = buildGenerator(program, settings);
 
+
     if (generator) {
-        const schema = generator.getSchemaForSymbol(interfaceName, true);
-        delete schema.$schema;
-        return schema;
+        try {
+            const schema = generator.getSchemaForSymbol(interfaceName, true);
+            delete schema.$schema;
+            return schema;
+        } catch (e) {
+            return null;
+        }
     }
     throw new Error('No generator created');
 }

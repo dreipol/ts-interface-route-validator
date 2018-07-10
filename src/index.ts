@@ -1,32 +1,42 @@
-import {PluginDefinitions, RouteConfigInterface} from './Interfaces/RouteConfigInterface';
-import {validatePlugins, validatePluginWithInterface} from './PluginSchemaValidator';
+import {RouteConfigInterface} from './Interfaces/RouteConfigInterface';
+import {validatePlugins} from './PluginSchemaValidator';
 import {getApiData} from './APIDataLoader';
 
 import {print} from './Printer';
+import {InterfaceNameResolveFunction} from './Interfaces/InterfaceNameResolveFunction';
+import {PluginInterface} from './Interfaces/PluginInterface';
 
-export async function validateRoutes(searchPath: string, routes: RouteConfigInterface[]): Promise<void> {
+export async function validateRoutes(searchPath: string, routes: RouteConfigInterface[], interfaceNameResolve: InterfaceNameResolveFunction = getInterfaceName): Promise<void> {
     for (let i = 0; i < routes.length; i++) {
-        const {urls, definitions, dataPath, definition} = routes[i];
+        const {urls, dataPath} = routes[i];
         for (let c = 0; c < urls.length; c++) {
             const url = urls[c];
-            await validateUrl(searchPath, url, dataPath, definitions, definition);
+            await validateUrl(searchPath, url, dataPath, interfaceNameResolve);
         }
     }
 }
 
-async function validateUrl(searchPath: string, url: string, dataPath: string, definitions: PluginDefinitions, definition?: string): Promise<void> {
+async function validateUrl(searchPath: string, url: string, dataPath: string, interfaceNameResolve: InterfaceNameResolveFunction): Promise<void> {
     const apiPlugins = await getApiData(url, dataPath);
 
-    let results = null;
-    if (definition && !Array.isArray(apiPlugins)) {
-        results = [await validatePluginWithInterface(searchPath, definition, apiPlugins)];
-    } else {
-        results = await validatePlugins(searchPath, apiPlugins, definitions);
-    }
+    const results = await validatePlugins(searchPath, apiPlugins, interfaceNameResolve);
 
     if (!results) {
         return;
     }
 
     print(url, results);
+}
+
+
+function getInterfaceName(plugin: PluginInterface): string {
+    let interfaceNames = plugin.type
+        .replace('dyn', '')
+        .replace(/-\w/ig, (chr) => {
+            return chr.toUpperCase();
+        })
+        .split('-');
+    interfaceNames.unshift('I');
+    interfaceNames.push('Plugin');
+    return interfaceNames.join('');
 }

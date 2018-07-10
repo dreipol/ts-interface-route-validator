@@ -9,7 +9,6 @@ export interface IVideoTeaserPluginContent {
     link: ILink;
 }
 
-
 export interface ILink {
     path: string;
     label: string;
