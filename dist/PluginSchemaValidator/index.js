@@ -13,10 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ajv_1 = __importDefault(require("ajv"));
 const InterfaceSchemaLoader_1 = require("../InterfaceSchemaLoader");
-const ERRORS = require('../ERRORTYPES');
+let cachedValidations = new Map();
 function validatePlugins(searchPath, apiPlugins, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
-        const checks = apiPlugins.map((apiPlugin) => {
+        const filteredPlugins = apiPlugins.filter((apiPlugin) => {
+            return !cachedValidations.has(apiPlugin.type);
+        });
+        const checks = filteredPlugins.map((apiPlugin) => {
             return validatePlugin(searchPath, apiPlugin, interfaceNameResolve);
         });
         return yield Promise.all(checks);
@@ -26,7 +29,9 @@ exports.validatePlugins = validatePlugins;
 function validatePlugin(searchPath, apiPlugin, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
         const interfaceName = interfaceNameResolve(apiPlugin);
-        return yield validatePluginWithInterface(searchPath, interfaceName, apiPlugin);
+        const result = yield validatePluginWithInterface(searchPath, interfaceName, apiPlugin);
+        cachedValidations.set(apiPlugin.type, result);
+        return result;
     });
 }
 exports.validatePlugin = validatePlugin;
@@ -35,10 +40,9 @@ function validatePluginWithInterface(searchPath, interfaceName, apiPlugin) {
         const schema = yield InterfaceSchemaLoader_1.getInterfaceSchema(searchPath, interfaceName);
         if (!schema) {
             return {
-                errType: ERRORS.WARNING,
                 plugin: apiPlugin,
                 valid: false,
-                errors: [
+                messages: [
                     {
                         params: {},
                         schemaPath: '',
@@ -53,11 +57,10 @@ function validatePluginWithInterface(searchPath, interfaceName, apiPlugin) {
         const validate = ajv.compile(schema);
         const valid = validate(apiPlugin);
         return {
-            errType: ERRORS.ERROR,
             plugin: apiPlugin,
             valid: !!valid,
             interfaceName,
-            errors: validate.errors,
+            messages: validate.errors || [],
         };
     });
 }

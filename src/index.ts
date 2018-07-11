@@ -18,14 +18,10 @@ export async function validateRoutes(searchPath: string, routes: RouteConfigInte
 
 async function validateUrl(searchPath: string, url: string, dataPath: string, interfaceNameResolve: InterfaceNameResolveFunction): Promise<void> {
     const apiPlugins = await getApiData(url, dataPath);
-
     const results = await validatePlugins(searchPath, apiPlugins, interfaceNameResolve);
-
-    if (!results) {
-        return;
+    if (results) {
+        print(url, results);
     }
-
-    print(url, results);
 }
 
 

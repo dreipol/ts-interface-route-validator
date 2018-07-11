@@ -25,12 +25,18 @@ function getApiData(url, dataPath) {
                 if (err) {
                     return rej(err);
                 }
-                data = JSON.parse(data);
-                const plugins = lodash_1.get(data, dataPath);
-                if (!plugins) {
-                    return rej(Error(`No plugins found at ${dataPath}`));
+                try {
+                    data = JSON.parse(data);
+                    const plugins = lodash_1.get(data, dataPath);
+                    if (!plugins) {
+                        return rej(Error(`No plugins found at ${dataPath}`));
+                    }
+                    return res(plugins);
                 }
-                return res(plugins);
+                catch (e) {
+                    console.error(url, e.message);
+                    return rej(e);
+                }
             });
         });
     });

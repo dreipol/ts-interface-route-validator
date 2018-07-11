@@ -27,10 +27,9 @@ function validateUrl(searchPath, url, dataPath, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
         const apiPlugins = yield APIDataLoader_1.getApiData(url, dataPath);
         const results = yield PluginSchemaValidator_1.validatePlugins(searchPath, apiPlugins, interfaceNameResolve);
-        if (!results) {
-            return;
+        if (results) {
+            Printer_1.print(url, results);
         }
-        Printer_1.print(url, results);
     });
 }
 function getInterfaceName(plugin) {

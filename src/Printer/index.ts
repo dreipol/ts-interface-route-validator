@@ -3,38 +3,25 @@ import {ValidationResultInterface} from '../Interfaces/ValidationResultInterface
 const chalk = require('chalk');
 const figures = require('figures');
 
-const ERRORS = require('../ERRORTYPES');
-
-const FIG_MAP: { [key: string]: string } = {
-    [ERRORS.WARNING]: figures.warning,
-    [ERRORS.ERROR]: figures.cross,
-};
 
 export function print(url: string, endpointResult: ValidationResultInterface[]) {
     endpointResult.map((result) => {
-        if (result.valid) {
-            printValid(result);
-        } else {
-            printError(url, result);
-        }
+        printResult(url, result);
     });
 }
 
-function printError(url: string, result: ValidationResultInterface) {
-    if (!result.errors) {
-        return;
+function printResult(url: string, result: ValidationResultInterface) {
+    if (result.valid) {
+        console.log(chalk.green(`${figures.tick} ${result.interfaceName} ${result.plugin.type}`));
+    } else {
+
+        result.messages.map(message => {
+            if (result.interfaceName && !result.valid) {
+                const errorLocation = [result.interfaceName, message.dataPath].join('');
+                console.log(chalk.red(`${figures.cross} ${url} - ${result.interfaceName} ${errorLocation} ${message.message}  ${JSON.stringify(message.params)}`));
+            } else {
+                console.log(chalk.yellow(`${figures.info} ${url} - ${message.message}`));
+            }
+        });
     }
-
-    result.errors.map(error => {
-        if (result.interfaceName) {
-            const errorLocation = [result.interfaceName, error.dataPath].join('');
-            console.log(chalk.red(`${FIG_MAP[result.errType]} ${url} - ${result.interfaceName} ${errorLocation} ${error.message}  ${JSON.stringify(error.params)}`));
-        } else {
-            console.log(chalk.yellow(`${FIG_MAP[result.errType]} ${url} - ${error.message}`));
-        }
-    });
-}
-
-function printValid(result: ValidationResultInterface) {
-    console.log(chalk.green(`${figures.tick} ${result.interfaceName} ${result.plugin.type}`));
 }
