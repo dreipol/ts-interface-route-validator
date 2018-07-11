@@ -16,18 +16,19 @@ const InterfaceSchemaLoader_1 = require("../InterfaceSchemaLoader");
 let cachedValidations = new Map();
 function validatePlugins(searchPath, apiPlugins, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
-        const filteredPlugins = apiPlugins.filter((apiPlugin) => {
-            return !cachedValidations.has(apiPlugin.type);
-        });
-        const checks = filteredPlugins.map((apiPlugin) => {
+        const checks = apiPlugins.map((apiPlugin) => {
             return validatePlugin(searchPath, apiPlugin, interfaceNameResolve);
         });
-        return yield Promise.all(checks);
+        return yield Promise.all(checks)
+            .then((results) => {
+            cachedValidations.clear();
+            return results;
+        });
     });
 }
 exports.validatePlugins = validatePlugins;
 function clearCache() {
-    cachedValidations.clear();
+    console.log('cache cleared');
 }
 exports.clearCache = clearCache;
 function validatePlugin(searchPath, apiPlugin, interfaceNameResolve) {

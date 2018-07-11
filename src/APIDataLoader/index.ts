@@ -21,7 +21,6 @@ export async function getApiData(url: string, dataPath: string): Promise<any> {
                 }
                 return res(plugins);
             } catch (e) {
-                console.error(url, e.message);
                 return rej(e);
             }
         });

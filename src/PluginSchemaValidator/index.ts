@@ -9,19 +9,19 @@ import {InterfaceNameResolveFunction} from '../Interfaces/InterfaceNameResolveFu
 let cachedValidations = new Map();
 
 export async function validatePlugins(searchPath: string, apiPlugins: PluginInterface[], interfaceNameResolve: InterfaceNameResolveFunction): Promise<ValidationResultInterface[]> {
-    const filteredPlugins = apiPlugins.filter((apiPlugin) => {
-        return !cachedValidations.has(apiPlugin.type);
-    });
-
-    const checks = filteredPlugins.map((apiPlugin) => {
+    const checks = apiPlugins.map((apiPlugin) => {
         return validatePlugin(searchPath, apiPlugin, interfaceNameResolve);
     });
 
-    return await Promise.all(checks);
+    return await Promise.all(checks)
+        .then((results) => {
+            cachedValidations.clear();
+            return results;
+        });
 }
 
-export function clearCache(){
-    cachedValidations.clear();
+export function clearCache() {
+    console.log('cache cleared');
 }
 
 export async function validatePlugin(searchPath: string, apiPlugin: PluginInterface, interfaceNameResolve: InterfaceNameResolveFunction): Promise<ValidationResultInterface> {

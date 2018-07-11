@@ -34,7 +34,6 @@ function getApiData(url, dataPath) {
                     return res(plugins);
                 }
                 catch (e) {
-                    console.error(url, e.message);
                     return rej(e);
                 }
             });
