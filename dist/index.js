@@ -23,6 +23,10 @@ function validateRoutes(searchPath, routes, interfaceNameResolve = getInterfaceN
     });
 }
 exports.validateRoutes = validateRoutes;
+function clearPluginCache() {
+    PluginSchemaValidator_1.clearCache();
+}
+exports.clearPluginCache = clearPluginCache;
 function validateUrl(searchPath, url, dataPath, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
         const apiPlugins = yield APIDataLoader_1.getApiData(url, dataPath);

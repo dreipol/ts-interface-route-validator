@@ -26,6 +26,10 @@ function validatePlugins(searchPath, apiPlugins, interfaceNameResolve) {
     });
 }
 exports.validatePlugins = validatePlugins;
+function clearCache() {
+    cachedValidations.clear();
+}
+exports.clearCache = clearCache;
 function validatePlugin(searchPath, apiPlugin, interfaceNameResolve) {
     return __awaiter(this, void 0, void 0, function* () {
         const interfaceName = interfaceNameResolve(apiPlugin);

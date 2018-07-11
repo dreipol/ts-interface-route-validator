@@ -9,7 +9,6 @@ import {InterfaceNameResolveFunction} from '../Interfaces/InterfaceNameResolveFu
 let cachedValidations = new Map();
 
 export async function validatePlugins(searchPath: string, apiPlugins: PluginInterface[], interfaceNameResolve: InterfaceNameResolveFunction): Promise<ValidationResultInterface[]> {
-
     const filteredPlugins = apiPlugins.filter((apiPlugin) => {
         return !cachedValidations.has(apiPlugin.type);
     });
@@ -21,9 +20,12 @@ export async function validatePlugins(searchPath: string, apiPlugins: PluginInte
     return await Promise.all(checks);
 }
 
+export function clearCache(){
+    cachedValidations.clear();
+}
+
 export async function validatePlugin(searchPath: string, apiPlugin: PluginInterface, interfaceNameResolve: InterfaceNameResolveFunction): Promise<ValidationResultInterface> {
     const interfaceName = interfaceNameResolve(apiPlugin);
-
     const result = await validatePluginWithInterface(searchPath, interfaceName, apiPlugin);
     cachedValidations.set(apiPlugin.type, result);
     return result;

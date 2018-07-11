@@ -1,5 +1,5 @@
 import {RouteConfigInterface} from './Interfaces/RouteConfigInterface';
-import {validatePlugins} from './PluginSchemaValidator';
+import {validatePlugins, clearCache} from './PluginSchemaValidator';
 import {getApiData} from './APIDataLoader';
 
 import {print} from './Printer';
@@ -14,6 +14,10 @@ export async function validateRoutes(searchPath: string, routes: RouteConfigInte
             await validateUrl(searchPath, url, dataPath, interfaceNameResolve);
         }
     }
+}
+
+export function clearPluginCache(){
+    clearCache();
 }
 
 async function validateUrl(searchPath: string, url: string, dataPath: string, interfaceNameResolve: InterfaceNameResolveFunction): Promise<void> {
